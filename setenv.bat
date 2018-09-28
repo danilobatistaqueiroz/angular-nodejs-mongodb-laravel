@@ -1,0 +1,1 @@
+set path=%path%;C:\Apps\node;C:\yarn\node_modules\.bin

@@ -1,0 +1,1 @@
+set path=C:\php\php7x64;C:\php\composer;%path%

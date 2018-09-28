@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<script src="./angular-1.6.9.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="guestCtrl"> 
+    <p>{{wel.history}}</p>
+    <li>
+        Title: {{wel.message + " " + wel.createdDate}}
+    </li>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+
+app.controller('guestCtrl', function($scope, $http) {
+    $http.get("http://localhost:4000/users/welcome")
+    .then(function(response) {
+        console.log('ok');
+        $scope.wel = response.data;
+    }, function(err) {
+        console.log('erro');
+        console.log(err);
+    });
+});
+</script>
+</body>
+</html>

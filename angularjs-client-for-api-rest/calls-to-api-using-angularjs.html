@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./angular-1.6.9.min.js"></script>
+    <script src="./angular-route-1.6.9.min.js"></script>
+    <base href="/">
+</head>
+<body>
+
+<div ng-app="myApp" ng-controller="guestCtrl"> 
+
+<p><a href="/">Main</a></p>
+
+<a href="register">Register</a>
+<a href="login">Login</a>
+<a href="userpanel">User Panel</a>
+
+
+<div ng-view></div>
+
+</div>
+
+
+<script>
+var app = angular.module('myApp', ['ngRoute']);
+
+app.config(
+    function ($routeProvider, $locationProvider) {
+        $routeProvider.
+        when('/register', {
+            templateUrl: 'register.html',
+            controller: 'guestCtrl'
+        }).
+        when('/login', {
+            templateUrl: 'login.html',
+            controller: 'guestCtrl'
+        }).
+        when('/userpanel', {
+            templateUrl: 'userpanel.html',
+            controller: 'userCtrl'
+        }).
+        otherwise({
+            controller: 'welcomeCtrl'
+        });
+        $locationProvider.html5Mode(true);
+    }
+);
+
+app.controller('guestCtrl', function($scope, $http) {
+    $scope.autenticar = function (username, password) {
+        console.log('enviando:'+username+' - password:'+password);
+        var data = {
+            username: username,
+            password: password
+        };
+        $http.post("http://localhost:4000/users/authenticate", JSON.stringify(data))
+        .then(function(response) {
+            console.log(response);
+            $scope.user = response.data;
+        }, function(response) {
+            console.log('erro');
+        });
+    }
+    $scope.registrar = function (username, password) {
+        var data = {
+            username: username,
+            password: password
+        };
+        $http.post("http://localhost:4000/users/register", JSON.stringify(data))
+        .then(function(response) {
+            console.log(response);
+            $scope.user = response.data;
+        }, function(response) {
+            console.log('erro');
+        });
+    }
+});
+
+app.controller('userCtrl', function($scope, $http) {
+        $http.get("http://localhost:4000/users/1", {headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YmFjMDQ2YmMxNDYwMjMxZDRmYjgyODAiLCJpYXQiOjE1MzgxNzA0OTV9.vO2lcI96i3clMZ8tbQyvSCMrC6qxHkQ7HcFzdAUCG8k'}})
+        .then(function(response) {
+            console.log(response);
+            $scope.user = response.data;
+        }, function(response) {
+            console.log('erro');
+        });
+});
+
+app.controller('welcomeCtrl', function($scope, $location) {
+
+});
+
+</script>
+
+</body>
+</html>
